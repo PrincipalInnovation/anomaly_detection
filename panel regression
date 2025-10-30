@@ -1,0 +1,31 @@
+Controls for Unobserved Heterogeneity:
+Accounts for individual traits that don’t change over time, reducing omitted variable bias.
+
+Combines Time-Series and Cross-Sectional Data:
+Merges variations across entities and time, providing richer and more informative analysis.
+
+Captures Dynamic Relationships:
+Tracks how past outcomes influence present behavior, revealing temporal patterns.
+
+Reduces Multicollinearity:
+Increased data variability lowers correlation among predictors, improving estimate stability.
+
+Improves Efficiency and Precision:
+More observations lead to greater statistical power and more reliable estimates.
+
+Supports Policy and Strategy Evaluation:
+Allows researchers to measure both short- and long-term effects of policies or interventions.
+
+Offers Model Flexibility:
+Provides multiple modeling options (FE, RE, Dynamic) to fit different data structures and assumptions.
+
+Three common modeling approaches — Fixed Effects, Between Effects, and Random Effects — handle these differences in distinct ways.
+
+Fixed Effects (FE):
+The Fixed Effects model focuses on within-entity variation. It controls for all characteristics that don’t change over time (like culture or geography) by letting each entity have its own intercept. This isolates the effect of variables that do vary over time — for example, how changes in education spending affect GDP within a country over the years.
+
+Between Effects (BE):
+The Between Effects model looks at differences across entities, using averages over time for each one. Instead of changes within an entity, it examines how entities differ from each other — for instance, whether countries with higher average education spending tend to have higher average GDP.
+
+Random Effects (RE):
+The Random Effects model blends both within and between variation. It assumes that the entity-specific effects are random and uncorrelated with the explanatory variables. This approach is more efficient than FE if that assumption holds, making it useful when you believe unobserved factors don’t bias the relationships being studied.
