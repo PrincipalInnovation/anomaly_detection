@@ -1,0 +1,32 @@
+noi = [106, 112, 123, 135, 144, 159, 163, 178, 189]  # start from A3
+rate = 0.07
+reversion = 250
+
+def rolling_npv_excel_exact(noi, rate, reversion):
+    n = len(noi)
+    results = []
+
+    for t in range(n):
+        if t == n - 1:
+            results.append(reversion)
+            continue
+
+        remaining_noi = noi[t:]
+        m = len(remaining_noi)
+
+        npv = 0.0
+
+        # NOI
+        for i, cf in enumerate(remaining_noi):
+            npv += cf / ((1 + rate) ** (i + 1))
+
+        # Reversion AFTER last NOI
+        npv += reversion / ((1 + rate) ** (m + 1))
+
+        results.append(npv)
+
+    return results
+
+npvs = rolling_npv_excel_exact(noi, rate, reversion)
+
+print(npvs)
