@@ -1,0 +1,10 @@
+import pandas as pd
+
+# assuming df is your dataframe
+
+df['reversion'] = (
+    df.sort_values('period')
+      .groupby(['property_id', 'building_id'])
+      .transform(lambda g: g.loc[g['period'] == 10, 'noi'].values[0] /
+                           g.loc[g['period'] == 10, 'cap rate'].values[0])
+)
