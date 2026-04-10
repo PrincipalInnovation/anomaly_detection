@@ -6,9 +6,10 @@ def rolling_npv_excel_exact(noi, rate, reversion):
     n = len(noi)
     results = []
 
-    for t in range(n):
-        if t == n - 1:
-            results.append(reversion)
+    for t in range(n + 1):  # <-- FIX HERE
+        if t == n:
+            # Final year: no future NOI, just last NOI + reversion
+            results.append(noi[-1] + reversion)
             continue
 
         remaining_noi = noi[t:]
@@ -29,4 +30,5 @@ def rolling_npv_excel_exact(noi, rate, reversion):
 
 npvs = rolling_npv_excel_exact(noi, rate, reversion)
 
-print(npvs)
+for x in npvs: 
+    print(x)
