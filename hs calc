@@ -1,0 +1,42 @@
+import pandas as pd
+
+# Example: df already exists
+
+# Identify year columns
+year_cols = ['2026', '2027', '2028', '2029', '2030']
+
+# Pivot so each feature becomes a column
+pivot_df = df.pivot_table(
+    index=['propertyId', 'buildingId', 'consolidationindicator'],
+    columns='feature',
+    values=year_cols
+)
+
+# Flatten multi-index columns
+pivot_df.columns = [f"{year}_{feature}" for year, feature in pivot_df.columns]
+pivot_df = pivot_df.reset_index()
+
+# Function to compute surplus
+def compute_surplus(row):
+    result = {}
+    for year in year_cols:
+        mv = row[f"{year}_marketvalue"]
+        gaap = row[f"{year}_gaap"]
+        debt = row.get(f"{year}_debt", 0)
+
+        if row['consolidationindicator'] == "non-consolidated jv":
+            result[year] = mv - debt - gaap
+        else:
+            result[year] = mv - gaap
+    return pd.Series(result)
+
+# Apply calculation
+surplus_df = pivot_df.apply(compute_surplus, axis=1)
+
+# Combine with identifiers
+final_df = pd.concat(
+    [pivot_df[['propertyId', 'buildingId']], surplus_df],
+    axis=1
+)
+
+print(final_df)
