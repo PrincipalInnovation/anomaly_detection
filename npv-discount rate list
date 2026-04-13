@@ -1,0 +1,39 @@
+noi = [2849656, 2849069, 2848793, 2848778, 2849369, 
+       2849512, 2849006, 2848454, 2847919, 2847318]
+
+rates = [0.07, 0.07, 0.07, 0.07, 0.07, 
+         0.07, 0.07, 0.07, 0.07, 0.07]
+
+reversion = 88778503
+
+def rolling_npv_variable_rates(noi, rates, reversion):
+    n = len(noi)
+    results = []
+
+    for t in range(n):
+        # अंतिम वर्ष → सिर्फ reversion
+        if t == n - 1:
+            results.append(reversion)
+            continue
+
+        # future cashflows (Excel style)
+        cashflows = noi[t+1:] + [reversion]
+        future_rates = rates[t+1:] + [rates[-1]]  # align rates with CFs
+
+        npv = 0.0
+        discount_factor = 1.0
+
+        for cf, r in zip(cashflows, future_rates):
+            discount_factor *= (1 + r)   # cumulative discounting
+            npv += cf / discount_factor
+
+        results.append(npv)
+
+    return results
+
+
+npvs = rolling_npv_variable_rates(noi, rates, reversion)
+
+print("length:", len(npvs))
+for x in npvs:
+    print(x)
