@@ -1,34 +1,34 @@
-noi = [106, 112, 123, 135, 144, 159, 163, 178, 189]  # start from A3
-rate = 0.07
-reversion = 250
+noi = [2849656, 2849069, 2848793, 2848778, 2849369, 
+       2849512, 2849006, 2848454, 2847919, 2847318]
 
-def rolling_npv_excel_exact(noi, rate, reversion):
+rate = 0.07
+reversion = 88778503
+
+def rolling_npv_excel_style(noi, rate, reversion):
     n = len(noi)
     results = []
 
-    for t in range(n + 1):  # <-- FIX HERE
-        if t == n:
-            # Final year: no future NOI, just last NOI + reversion
-            results.append(noi[-1] + reversion)
+    for t in range(n):
+        if t == n - 1:
+            results.append(reversion)
             continue
 
-        remaining_noi = noi[t:]
-        m = len(remaining_noi)
+        # Excel NPV inputs: future NOI + reversion
+        cashflows = noi[t+1:] + [reversion]
 
         npv = 0.0
 
-        # NOI
-        for i, cf in enumerate(remaining_noi):
+        # Excel NPV logic: each CF discounted from next period
+        for i, cf in enumerate(cashflows):
             npv += cf / ((1 + rate) ** (i + 1))
-
-        # Reversion AFTER last NOI
-        npv += reversion / ((1 + rate) ** (m + 1))
 
         results.append(npv)
 
     return results
 
-npvs = rolling_npv_excel_exact(noi, rate, reversion)
 
-for x in npvs: 
+npvs = rolling_npv_excel_style(noi, rate, reversion)
+
+print("length:", len(npvs))
+for x in npvs:
     print(x)
