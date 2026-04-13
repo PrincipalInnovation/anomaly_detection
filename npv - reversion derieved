@@ -1,0 +1,43 @@
+noi = [2849656, 2849069, 2848793, 2848778, 2849369, 
+       2849512, 2849006, 2848454, 2847919, 2847318]
+
+rates = [0.07, 0.07, 0.07, 0.07, 0.07, 
+         0.07, 0.07, 0.07, 0.07, 0.07]
+
+cap_rate = [0.05, 0.05, 0.05, 0.05, 0.05, 
+            0.05, 0.05, 0.05, 0.05, 0.05]
+
+def rolling_npv_with_cap(noi, rates, cap_rate):
+    n = len(noi)
+    results = []
+
+    # ✅ Reversion from final year
+    reversion = noi[-1] / cap_rate[-1]
+
+    for t in range(n):
+        # Year 10 → सिर्फ reversion
+        if t == n - 1:
+            results.append(reversion)
+            continue
+
+        # Future CFs (Excel style)
+        cashflows = noi[t+1:] + [reversion]
+        future_rates = rates[t+1:] + [rates[-1]]
+
+        npv = 0.0
+        discount_factor = 1.0
+
+        for cf, r in zip(cashflows, future_rates):
+            discount_factor *= (1 + r)
+            npv += cf / discount_factor
+
+        results.append(npv)
+
+    return results
+
+
+npvs = rolling_npv_with_cap(noi, rates, cap_rate)
+
+print("length:", len(npvs))
+for x in npvs:
+    print(x)
